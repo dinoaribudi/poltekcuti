@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistem Cuti Karyawan</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1a56db;
+    --primary-dark: #1e429f;
+    --primary-light: #e8f0fe;
+    --success: #057a55;
+    --success-light: #def7ec;
+    --warning: #92400e;
+    --warning-light: #fef3c7;
+    --danger: #9b1c1c;
+    --danger-light: #fde8e8;
+    --text: #111928;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --bg: #f3f4f6;
+    --white: #ffffff;
+    --sidebar-w: 240px;
+    --radius: 10px;
+    --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ===== LOGIN ===== */
+  #login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: stretch;
+    background: #1a56db;
+  }
+
+  .login-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 60px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    background-image: url('wallpaper.png');
+    background-size: cover;
+    background-position: center;
+  }
+
+  .login-left::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.35);
+    z-index: 0;
+  }
+
+  .login-left > * { position: relative; z-index: 1; }
+
+  .login-left .brand-icon {
+    width: 64px;
+    height: 64px;
+    background: rgba(255,255,255,.2);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 28px;
+    backdrop-filter: blur(8px);
+  }
+
+  .login-left h1 {
+    font-size: 56px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    color: white;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .login-left .tagline {
+    font-size: 15px;
+    color: rgba(255,255,255,.9);
+    line-height: 1.6;
+    max-width: 340px;
+    margin-bottom: 40px;
+  }
+
+  .login-left .tagline strong { color: white; }
+
+  .login-left .features {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .login-left .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: rgba(255,255,255,.9);
+  }
+
+  .login-left .feature-item .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.7);
+    flex-shrink: 0;
+  }
+
+  .login-right {
+    width: 480px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 48px;
+    box-shadow: -20px 0 60px rgba(0,0,0,.15);
+  }
+
+  .login-card {
+    width: 100%;
+  }
+
+  .login-logo {
+    text-align: left;
+    margin-bottom: 36px;
+  }
+
+  .login-logo h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .login-logo p { color: var(--text-muted); font-size: 13px; }
+
+  @media (max-width: 768px) {
+    #login-screen { flex-direction: column; }
+    .login-left { display: none; }
+    .login-right { width: 100%; padding: 40px 24px; }
+  }
+
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+
+  .form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+    background: white;
+    transition: border-color .2s;
+    outline: none;
+  }
+
+  .form-control:focus { border-color: var(--primary); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+    text-decoration: none;
+  }
+
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-success { background: var(--success); color: white; }
+  .btn-success:hover { background: #046c4e; }
+  .btn-danger { background: #e02424; color: white; }
+  .btn-danger:hover { background: #c81e1e; }
+  .btn-outline { background: white; color: var(--text); border: 1.5px solid var(--border); }
+  .btn-outline:hover { background: var(--bg); }
+  .btn-sm { padding: 6px 12px; font-size: 12px; }
+  .btn-full { width: 100%; }
+
+  .btn:disabled { opacity: .6; cursor: not-allowed; }
+
+  .alert {
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    margin-bottom: 16px;
+    display: none;
+  }
+
+  .alert-danger { background: var(--danger-light); color: var(--danger); border: 1px solid #f8b4b4; }
+  .alert-success { background: var(--success-light); color: var(--success); border: 1px solid #84e1bc; }
+  .alert.show { display: block; }
+
+  /* ===== APP LAYOUT — TOP NAVBAR ===== */
+  #app-screen { display: none; min-height: 100vh; background: var(--bg); }
+
+  .layout { display: flex; flex-direction: column; min-height: 100vh; }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    height: 52px;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  }
+
+  .topbar-brand {
+    display: flex;
+    flex-direction: column;
+    margin-right: 32px;
+    min-width: 160px;
+  }
+
+  .topbar-brand .brand-name {
+    font-size: 16px;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -.3px;
+    line-height: 1.1;
+  }
+
+  .topbar-brand .brand-sub {
+    font-size: 9px;
+    color: rgba(255,255,255,.65);
+    letter-spacing: .02em;
+    line-height: 1.2;
+  }
+
+  /* NAV ITEMS in topbar */
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex: 1;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav::-webkit-scrollbar { display: none; }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,.75);
+    transition: all .15s;
+    border: none;
+    background: none;
+    white-space: nowrap;
+    text-align: left;
+  }
+
+  .nav-item:hover { background: rgba(255,255,255,.12); color: white; }
+  .nav-item.active { background: rgba(255,255,255,.2); color: white; font-weight: 700; }
+  .nav-item svg { flex-shrink: 0; width: 16px; height: 16px; }
+
+  /* RIGHT SIDE of topbar */
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .topbar-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+  }
+
+  .topbar-user .avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .topbar-user .user-info-top {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar-user .user-info-top .name {
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    line-height: 1.2;
+  }
+
+  .topbar-user .user-info-top .role-badge {
+    font-size: 10px;
+    color: rgba(255,255,255,.65);
+  }
+
+  .btn-logout {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 1.5px solid rgba(255,255,255,.35);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: white;
+    background: none;
+    transition: all .15s;
+  }
+
+  .btn-logout:hover { background: rgba(255,255,255,.15); border-color: rgba(255,255,255,.6); }
+
+  /* MAIN CONTENT */
+  .main-content {
+    margin-top: 52px;
+    flex: 1;
+    padding: 28px;
+    min-height: calc(100vh - 52px);
+  }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .page-header {
+    margin-bottom: 24px;
+  }
+
+  .page-header h1 { font-size: 22px; font-weight: 700; }
+  .page-header p { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
+
+  .page-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-header h3 { font-size: 15px; font-weight: 700; }
+  .card-body { padding: 20px; }
+
+  /* ===== STAT CARDS ===== */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .stat-card .label { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 8px; }
+  .stat-card .value { font-size: 28px; font-weight: 700; color: var(--text); line-height: 1; }
+  .stat-card .sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .stat-card.blue { border-left: 4px solid var(--primary); }
+  .stat-card.green { border-left: 4px solid var(--success); }
+  .stat-card.yellow { border-left: 4px solid #d97706; }
+  .stat-card.red { border-left: 4px solid #e02424; }
+
+  /* ===== TABLE ===== */
+  .table-wrap { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead th {
+    background: var(--bg);
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: #fafafa; }
+
+  /* ===== BADGE ===== */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .badge-pending { background: var(--warning-light); color: var(--warning); }
+  .badge-approved { background: var(--success-light); color: var(--success); }
+  .badge-rejected { background: var(--danger-light); color: var(--danger); }
+
+  /* ===== QUOTA BARS ===== */
+  .quota-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .quota-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow);
+  }
+
+  .quota-card .jenis { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+  .quota-card .nums { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+  .quota-card .nums span:last-child { font-weight: 700; color: var(--text); }
+
+  .progress { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .progress-bar {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--primary);
+    transition: width .3s ease;
+  }
+
+  .progress-bar.low { background: #e02424; }
+  .progress-bar.mid { background: #d97706; }
+  .progress-bar.ok { background: var(--success); }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.4);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-overlay.show { display: flex; }
+
+  .modal {
+    background: white;
+    border-radius: 14px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.2);
+    overflow: hidden;
+  }
+
+  .modal-header {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .modal-header h3 { font-size: 16px; font-weight: 700; }
+
+  .modal-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: var(--bg);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: var(--text-muted);
+  }
+
+  .modal-close:hover { background: var(--border); }
+  .modal-body { padding: 24px; }
+  .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+
+  /* ===== MISC ===== */
+  .empty-state {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--text-muted);
+  }
+
+  .empty-state svg { margin: 0 auto 12px; opacity: .4; }
+  .empty-state p { font-size: 14px; }
+
+  .loading {
+    text-align: center;
+    padding: 32px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  .text-sm { font-size: 12px; color: var(--text-muted); }
+  .text-right { text-align: right; }
+  .flex { display: flex; }
+  .gap-2 { gap: 8px; }
+  .mt-4 { margin-top: 16px; }
+  .mb-4 { margin-bottom: 16px; }
+
+  .filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter-bar select, .filter-bar input {
+    padding: 7px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    background: white;
+    color: var(--text);
+    outline: none;
+  }
+
+  .filter-bar select:focus, .filter-bar input:focus { border-color: var(--primary); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 480px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* HR quota table actions */
+  .action-row { display: flex; gap: 6px; align-items: center; }
+
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin .6s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #111928;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 9999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all .3s;
+    max-width: 320px;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { background: var(--success); }
+  .toast.error { background: #e02424; }
+</style>
+</head>
+<body>
+
+<!-- ========== LOGIN ========== -->
+<div id="login-screen">
+
+  <!-- LEFT BRANDING -->
+  <div class="login-left">
+    <div class="brand-icon">
+      <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+      </svg>
+    </div>
+    <h1>Away</h1>
+    <p class="tagline">
+      <strong>Application for Work-break And daY off</strong><br>
+      Kelola cuti dan hari libur pengganti karyawan dengan mudah dan efisien.
+    </p>
+    <div class="features">
+      <div class="feature-item"><div class="dot"></div>Pengajuan cuti online kapan saja</div>
+      <div class="feature-item"><div class="dot"></div>Approval langsung dari atasan</div>
+      <div class="feature-item"><div class="dot"></div>Penggantian Hari Libur (PHL) terintegrasi</div>
+      <div class="feature-item"><div class="dot"></div>Monitoring kuota cuti real-time</div>
+    </div>
+  </div>
+
+  <!-- RIGHT LOGIN CARD -->
+  <div class="login-right">
+    <div class="login-card">
+      <div class="login-logo">
+        <h2>Away</h2>
+        <p>Application for Work-break And daY off</p>
+        <span style="display:inline-block; margin-top:8px; font-size:11px; font-weight:700; color:#1a56db; background:#e8f0fe; padding:2px 10px; border-radius:20px; letter-spacing:.04em;">v1.9</span>
+      </div>
+
+      <div id="login-alert" class="alert alert-danger"></div>
+
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="login-username" class="form-control" placeholder="Masukkan username" autocomplete="username">
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-password" class="form-control" placeholder="Masukkan password" autocomplete="current-password">
+      </div>
+
+      <button class="btn btn-primary btn-full" onclick="doLogin()" id="btn-login">
+        <span>Masuk</span>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ========== APP ========== -->
+<div id="app-screen">
+  <div class="layout">
+
+    <!-- TOP NAVBAR -->
+    <header class="topbar">
+      <!-- Brand -->
+      <div class="topbar-brand">
+        <span class="brand-name">✈️ Away</span>
+        <span class="brand-sub">Application for Work-break And daY off</span>
+      </div>
+
+      <!-- Nav items -->
+      <nav class="nav" id="sidebar-nav"></nav>
+
+      <!-- Right: user info + logout -->
+      <div class="topbar-right">
+        <div class="topbar-user">
+          <div class="avatar" id="nav-avatar">--</div>
+          <div class="user-info-top">
+            <span class="name" id="nav-name">-</span>
+            <span class="role-badge" id="nav-role">-</span>
+          </div>
+        </div>
+        <button class="btn-logout" onclick="logout()">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
+          Keluar
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+      <!-- DASHBOARD -->
+      <div class="page" id="page-dashboard">
+        <div class="page-header">
+          <h1>Dashboard</h1>
+          <p>Selamat datang, <span id="dash-name">-</span></p>
+        </div>
+        <div class="stat-grid" id="dash-stats"></div>
+        <div class="card">
+          <div class="card-header"><h3>Riwayat Cuti Terbaru</h3></div>
+          <div class="card-body" style="padding:0">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Jenis</th><th>Tanggal Mulai</th><th>Selesai</th><th>Hari</th><th>Status</th></tr></thead>
+                <tbody id="dash-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUOTA -->
+      <div class="page" id="page-quota">
+        <div class="page-header">
+          <h1>Kuota Cuti</h1>
+          <p>Sisa kuota cuti Anda tahun ini</p>
+        </div>
+        <div id="quota-cards" class="quota-grid"></div>
+      </div>
+
+      <!-- PENGAJUAN (karyawan) -->
+      <div class="page" id="page-ajukan">
+        <div class="page-header">
+          <h1>Pengajuan Cuti</h1>
+          <p>Ajukan dan kelola permohonan cuti</p>
+        </div>
+        <div class="page-actions">
+          <div></div>
+          <button class="btn btn-primary" onclick="openModalAjukan()">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+            </svg>
+            Ajukan Cuti
+          </button>
+        </div>
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Jenis Cuti</th><th>Tgl Mulai</th><th>Tgl Selesai</th><th>Hari</th><th>Alasan</th><th>Status</th><th>Diajukan</th><th>Aksi</th></tr></thead>
+                <tbody id="ajukan-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- APPROVAL (atasan) -->
+      <div class="page" id="page-approval">
+        <div class="page-header">
+          <h1>Persetujuan Cuti</h1>
+          <p>Kelola permohonan cuti tim Anda</p>
+        </div>
+        <div class="filter-bar">
+          <select id="filter-status-approval" onchange="loadApprovalData()">
+            <option value="">Semua Status</option>
+            <option value="pending">Menunggu</option>
+            <option value="approved">Disetujui</option>
+            <option value="rejected">Ditolak</option>
+          </select>
+        </div>
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Karyawan</th><th>Jenis Cuti</th><th>Tgl Mulai</th><th>Tgl Selesai</th><th>Hari</th><th>Alasan</th><th>Status</th><th>Tgl Approval</th><th>Aksi</th></tr></thead>
+                <tbody id="approval-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEMUA TRANSAKSI (HR) -->
+      <div class="page" id="page-all-transaksi">
+        <div class="page-header">
+          <h1>Semua Transaksi Cuti</h1>
+          <p>Monitor semua pengajuan cuti karyawan</p>
+        </div>
+        <div class="filter-bar">
+          <select id="filter-status-hr" onchange="loadAllTransaksi()">
+            <option value="">Semua Status</option>
+            <option value="pending">Menunggu</option>
+            <option value="approved">Disetujui</option>
+            <option value="rejected">Ditolak</option>
+          </select>
+          <input type="text" id="filter-search-hr" placeholder="Cari nama..." oninput="loadAllTransaksi()">
+        </div>
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Karyawan</th><th>Jenis</th><th>Tgl Mulai</th><th>Tgl Selesai</th><th>Hari</th><th>Alasan</th><th>Status</th><th>Diajukan</th><th>Tgl Approval</th></tr></thead>
+                <tbody id="all-transaksi-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MANAGE QUOTA (HR) -->
+      <div class="page" id="page-manage-quota">
+        <div class="page-header">
+          <h1>Kelola Kuota Cuti</h1>
+          <p>Atur kuota cuti setiap karyawan</p>
+        </div>
+        <div class="filter-bar">
+          <select id="filter-user-quota" onchange="loadManageQuota()">
+            <option value="">Semua Karyawan</option>
+          </select>
+          <button class="btn btn-primary btn-sm" onclick="openModalTambahQuota()">+ Tambah Kuota</button>
+        </div>
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Karyawan</th><th>Jenis Cuti</th><th>Kuota</th><th>Terpakai</th><th>Sisa</th><th>Aksi</th></tr></thead>
+                <tbody id="manage-quota-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHL (karyawan) -->
+      <div class="page" id="page-phl">
+        <div class="page-header">
+          <h1>Penggantian Hari Libur (PHL)</h1>
+          <p>Daftar PHL Anda yang tersedia dan riwayat penggunaan</p>
+        </div>
+
+        <!-- PHL Tersedia -->
+        <div class="card mb-4" style="margin-bottom:20px;">
+          <div class="card-header">
+            <h3>🟢 PHL Tersedia</h3>
+            <span class="text-sm">Hanya menampilkan PHL dalam masa berlaku</span>
+          </div>
+          <div class="card-body" style="padding:0">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Tgl Masuk Kerja</th><th>Masa Berlaku</th><th>Keterangan</th><th>Aksi</th></tr></thead>
+                <tbody id="phl-available-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHL Sudah Digunakan -->
+        <div class="card">
+          <div class="card-header">
+            <h3>📋 Riwayat Penggunaan PHL</h3>
+          </div>
+          <div class="card-body" style="padding:0">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Tgl Masuk Kerja</th><th>Tgl Digunakan</th><th>Alasan</th><th>Status</th><th>Tgl Approval</th><th>Aksi</th></tr></thead>
+                <tbody id="phl-used-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ====== MODAL AJUKAN CUTI ====== -->
+<div class="modal-overlay" id="modal-ajukan">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Ajukan Cuti Baru</h3>
+      <button class="modal-close" onclick="closeModal('modal-ajukan')">×</button>
+    </div>
+    <div class="modal-body">
+      <div id="ajukan-alert" class="alert alert-danger"></div>
+      <div class="form-group">
+        <label>Jenis Cuti</label>
+        <select id="form-jenis" class="form-control" onchange="updateSisaQuota()">
+          <option value="">Pilih jenis cuti...</option>
+        </select>
+      </div>
+      <div id="sisa-info" style="display:none; font-size:12px; color:var(--text-muted); margin-top:-10px; margin-bottom:12px;"></div>
+      <div class="two-col">
+        <div class="form-group">
+          <label>Tanggal Mulai</label>
+          <input type="date" id="form-tgl-mulai" class="form-control" onchange="hitungHari()">
+        </div>
+        <div class="form-group">
+          <label>Tanggal Selesai</label>
+          <input type="date" id="form-tgl-selesai" class="form-control" onchange="hitungHari()">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Jumlah Hari <span id="hari-hitung" style="color:var(--primary); font-weight:700;"></span></label>
+        <input type="number" id="form-hari" class="form-control" placeholder="Otomatis dihitung" readonly>
+      </div>
+      <div class="form-group">
+        <label>Alasan / Keterangan</label>
+        <textarea id="form-alasan" class="form-control" rows="3" placeholder="Tuliskan alasan cuti..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-ajukan')">Batal</button>
+      <button class="btn btn-primary" onclick="submitAjukan()" id="btn-submit-ajukan">Ajukan Cuti</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== MODAL TAMBAH QUOTA ====== -->
+<div class="modal-overlay" id="modal-tambah-quota">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Tambah Kuota Cuti</h3>
+      <button class="modal-close" onclick="closeModal('modal-tambah-quota')">×</button>
+    </div>
+    <div class="modal-body">
+      <div id="quota-alert" class="alert alert-danger"></div>
+      <div class="form-group">
+        <label>Karyawan</label>
+        <select id="form-quota-user" class="form-control"></select>
+      </div>
+      <div class="form-group">
+        <label>Jenis Cuti</label>
+        <input type="text" id="form-quota-jenis" class="form-control" placeholder="cth: Cuti Tahunan, Cuti Sakit...">
+      </div>
+      <div class="form-group">
+        <label>Jumlah Kuota (hari)</label>
+        <input type="number" id="form-quota-jumlah" class="form-control" placeholder="12" min="0">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-tambah-quota')">Batal</button>
+      <button class="btn btn-primary" onclick="submitTambahQuota()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== MODAL EDIT QUOTA ====== -->
+<div class="modal-overlay" id="modal-edit-quota">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Edit Kuota Cuti</h3>
+      <button class="modal-close" onclick="closeModal('modal-edit-quota')">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-quota-userid">
+      <input type="hidden" id="edit-quota-jenis">
+      <div class="form-group">
+        <label>Karyawan</label>
+        <input type="text" id="edit-quota-nama" class="form-control" readonly>
+      </div>
+      <div class="form-group">
+        <label>Jenis Cuti</label>
+        <input type="text" id="edit-quota-jenis-show" class="form-control" readonly>
+      </div>
+      <div class="form-group">
+        <label>Kuota (hari)</label>
+        <input type="number" id="edit-quota-value" class="form-control" min="0">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-edit-quota')">Batal</button>
+      <button class="btn btn-primary" onclick="submitEditQuota()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== MODAL GUNAKAN PHL ====== -->
+<div class="modal-overlay" id="modal-phl">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Gunakan PHL</h3>
+      <button class="modal-close" onclick="closeModal('modal-phl')">×</button>
+    </div>
+    <div class="modal-body">
+      <div id="phl-modal-alert" class="alert alert-danger"></div>
+      <div class="form-group">
+        <label>PHL yang Digunakan</label>
+        <input type="text" id="form-phl-info" class="form-control" readonly>
+        <input type="hidden" id="form-phl-id">
+        <input type="hidden" id="form-phl-tgl-masuk">
+      </div>
+      <div class="form-group">
+        <label>Tanggal Tidak Masuk (Pengganti)</label>
+        <input type="date" id="form-phl-digunakan-tgl" class="form-control">
+        <div style="font-size:11px; color:var(--text-muted); margin-top:4px;" id="form-phl-berlaku-info"></div>
+      </div>
+      <div class="form-group">
+        <label>Alasan / Keterangan</label>
+        <textarea id="form-phl-alasan" class="form-control" rows="3" placeholder="Tuliskan alasan..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-phl')">Batal</button>
+      <button class="btn btn-primary" onclick="submitPHL()" id="btn-submit-phl">Ajukan</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// =====================================================================
+// KONFIGURASI — GANTI DENGAN URL APPS SCRIPT ANDA SETELAH DEPLOY
+// =====================================================================
+const API_URL = 'https://script.google.com/macros/s/AKfycbxs-EMjsNjeuzWvIlOOo6uIMOw_DcZym5Lp2u15M7WINHVo57Ww4SgM2PrucCyF7KcETg/exec';
+
+// =====================================================================
+// STATE
+// =====================================================================
+let currentUser = null;
+let allUsers = [];
+let myQuota = [];
+let myTransaksi = [];
+let allTransaksi = [];
+let allQuota = [];
+
+// =====================================================================
+// HELPER — gunakan GET agar tidak ada CORS preflight
+// =====================================================================
+async function api(params) {
+  try {
+    const action = params.action || '';
+    const dataObj = Object.assign({}, params);
+    delete dataObj.action;
+    const url = API_URL + '?action=' + encodeURIComponent(action) + '&data=' + encodeURIComponent(JSON.stringify(dataObj));
+    const res = await fetch(url);
+    return await res.json();
+  } catch (e) {
+    return { success: false, message: 'Gagal terhubung ke server: ' + e.message };
+  }
+}
+
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => { t.className = 'toast'; }, 3500);
+}
+
+function showAlert(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+function hideAlert(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+function formatDate(d) {
+  if (!d) return '-';
+  const dt = new Date(d);
+  if (isNaN(dt)) return d;
+  return dt.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function statusBadge(s) {
+  const map = {
+    pending:   '<span class="badge badge-pending">⏳ Menunggu</span>',
+    approved:  '<span class="badge badge-approved">✓ Disetujui</span>',
+    rejected:  '<span class="badge badge-rejected">✗ Ditolak</span>',
+    withdrawn: '<span class="badge" style="background:#f3f4f6;color:#6b7280;">↩ Dibatalkan</span>'
+  };
+  return map[s] || s;
+}
+
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+function getUserName(userId) {
+  const u = allUsers.find(u => u.id === userId);
+  return u ? u.name : userId;
+}
+
+// =====================================================================
+// LOGIN
+// =====================================================================
+document.getElementById('login-password').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+async function doLogin() {
+  const username = document.getElementById('login-username').value.trim();
+  const password = document.getElementById('login-password').value;
+  if (!username || !password) {
+    showAlert('login-alert', 'Username dan password wajib diisi.');
+    return;
+  }
+  const btn = document.getElementById('btn-login');
+  btn.innerHTML = '<span class="spinner"></span> Memproses...';
+  btn.disabled = true;
+  hideAlert('login-alert');
+
+  const res = await api({ action: 'login', username, password });
+  btn.innerHTML = '<span>Masuk</span>';
+  btn.disabled = false;
+
+  if (res.success) {
+    currentUser = res.user;
+    initApp();
+  } else {
+    showAlert('login-alert', res.message || 'Login gagal.');
+  }
+}
+
+function logout() {
+  currentUser = null;
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app-screen').style.display = 'none';
+  document.getElementById('login-username').value = '';
+  document.getElementById('login-password').value = '';
+}
+
+// =====================================================================
+// APP INIT
+// =====================================================================
+async function initApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display = 'block';
+
+  const initials = currentUser.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+  document.getElementById('nav-avatar').textContent = initials;
+  document.getElementById('nav-name').textContent = currentUser.name;
+  const roleLabel = { hr_staff: 'HR Staff', karyawan: 'Karyawan', atasan: 'Atasan' };
+  document.getElementById('nav-role').textContent = (roleLabel[currentUser.role] || currentUser.role) + ' — ' + currentUser.dept;
+  document.getElementById('dash-name').textContent = currentUser.name;
+
+  buildNav();
+
+  // Load users
+  const uRes = await api({ action: 'getUsers' });
+  if (uRes.success) allUsers = uRes.users;
+
+  navigateTo('dashboard');
+}
+
+function buildNav() {
+  const nav = document.getElementById('sidebar-nav');
+  const role = currentUser.role;
+
+  const items = [
+    { id: 'dashboard', label: 'Dashboard', icon: homeIcon(), roles: ['karyawan', 'atasan', 'hr_staff'] },
+    { id: 'quota', label: 'Kuota Cuti Saya', icon: chartIcon(), roles: ['karyawan'] },
+    { id: 'ajukan', label: 'Pengajuan Cuti', icon: docIcon(), roles: ['karyawan'] },
+    { id: 'phl', label: 'Gunakan PHL', icon: phlIcon(), roles: ['karyawan'] },
+    { id: 'approval', label: 'Persetujuan Cuti', icon: checkIcon(), roles: ['atasan'] },
+    { id: 'all-transaksi', label: 'Semua Transaksi', icon: listIcon(), roles: ['hr_staff'] },
+    { id: 'manage-quota', label: 'Kelola Kuota', icon: settingIcon(), roles: ['hr_staff'] },
+  ];
+
+  nav.innerHTML = items
+    .filter(i => i.roles.includes(role))
+    .map(i => `<button class="nav-item" id="nav-${i.id}" onclick="navigateTo('${i.id}')">${i.icon} ${i.label}</button>`)
+    .join('');
+}
+
+function navigateTo(page) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + page);
+  if (navEl) navEl.classList.add('active');
+  const pageEl = document.getElementById('page-' + page);
+  if (pageEl) pageEl.classList.add('active');
+
+  switch (page) {
+    case 'dashboard': loadDashboard(); break;
+    case 'quota': loadQuota(); break;
+    case 'ajukan': loadAjukan(); break;
+    case 'phl': loadPHL(); break;
+    case 'approval': loadApprovalData(); break;
+    case 'all-transaksi': loadAllTransaksi(); break;
+    case 'manage-quota': loadManageQuota(); break;
+  }
+}
+
+// =====================================================================
+// DASHBOARD
+// =====================================================================
+async function loadDashboard() {
+  const role = currentUser.role;
+
+  if (role === 'karyawan') {
+    const [qRes, tRes] = await Promise.all([
+      api({ action: 'getQuota', user_id: currentUser.id }),
+      api({ action: 'getTransaksi', user_id: currentUser.id })
+    ]);
+
+    const quota = qRes.success ? qRes.quota : [];
+    const transaksi = tRes.success ? tRes.transaksi : [];
+
+    const totalSisa = quota.reduce((s, q) => s + Number(q.sisa), 0);
+    const totalTerpakai = quota.reduce((s, q) => s + Number(q.terpakai), 0);
+    const pending = transaksi.filter(t => t.status === 'pending').length;
+
+    document.getElementById('dash-stats').innerHTML = `
+      <div class="stat-card blue"><div class="label">Total Sisa Cuti</div><div class="value">${totalSisa}</div><div class="sub">hari tersedia</div></div>
+      <div class="stat-card green"><div class="label">Cuti Terpakai</div><div class="value">${totalTerpakai}</div><div class="sub">hari tahun ini</div></div>
+      <div class="stat-card yellow"><div class="label">Menunggu Approval</div><div class="value">${pending}</div><div class="sub">pengajuan</div></div>
+    `;
+
+    const sorted = [...transaksi].sort((a, b) => new Date(b.tgl_pengajuan) - new Date(a.tgl_pengajuan)).slice(0, 5);
+    renderTransaksiTable('dash-table', sorted, false);
+
+  } else if (role === 'atasan') {
+    const res = await api({ action: 'getPendingForAtasan', atasan_id: currentUser.id });
+    const transaksi = res.success ? res.transaksi : [];
+    const pending = transaksi.filter(t => t.status === 'pending').length;
+    const approved = transaksi.filter(t => t.status === 'approved').length;
+
+    document.getElementById('dash-stats').innerHTML = `
+      <div class="stat-card yellow"><div class="label">Menunggu Persetujuan</div><div class="value">${pending}</div><div class="sub">pengajuan</div></div>
+      <div class="stat-card green"><div class="label">Disetujui</div><div class="value">${approved}</div><div class="sub">pengajuan</div></div>
+      <div class="stat-card blue"><div class="label">Total Tim</div><div class="value">${transaksi.length}</div><div class="sub">transaksi</div></div>
+    `;
+
+    const sorted = [...transaksi].sort((a, b) => new Date(b.tgl_pengajuan) - new Date(a.tgl_pengajuan)).slice(0, 5);
+    renderTransaksiTableAtasan('dash-table', sorted);
+
+  } else if (role === 'hr_staff') {
+    const [tRes, qRes] = await Promise.all([
+      api({ action: 'getAllTransaksi' }),
+      api({ action: 'getAllQuota' })
+    ]);
+
+    const transaksi = tRes.success ? tRes.transaksi : [];
+    const quota = qRes.success ? qRes.quota : [];
+
+    const pending = transaksi.filter(t => t.status === 'pending').length;
+    const approved = transaksi.filter(t => t.status === 'approved').length;
+    const totalKaryawan = [...new Set(quota.map(q => q.user_id))].length;
+
+    document.getElementById('dash-stats').innerHTML = `
+      <div class="stat-card blue"><div class="label">Total Pengajuan</div><div class="value">${transaksi.length}</div><div class="sub">semua status</div></div>
+      <div class="stat-card yellow"><div class="label">Menunggu</div><div class="value">${pending}</div><div class="sub">belum diproses</div></div>
+      <div class="stat-card green"><div class="label">Disetujui</div><div class="value">${approved}</div><div class="sub">pengajuan</div></div>
+      <div class="stat-card red"><div class="label">Karyawan Terdaftar</div><div class="value">${allUsers.filter(u => u.role === 'karyawan').length}</div><div class="sub">dengan quota</div></div>
+    `;
+
+    const sorted = [...transaksi].sort((a, b) => new Date(b.tgl_pengajuan) - new Date(a.tgl_pengajuan)).slice(0, 5);
+    renderTransaksiTableAtasan('dash-table', sorted);
+  }
+}
+
+// =====================================================================
+// QUOTA
+// =====================================================================
+async function loadQuota() {
+  const res = await api({ action: 'getQuota', user_id: currentUser.id });
+  const allQuotaRaw = res.success ? res.quota : [];
+  // Filter hanya quota yang aktif berdasarkan tanggal hari ini
+  myQuota = filterActiveQuota(allQuotaRaw);
+  renderQuotaCards(myQuota, 'quota-cards');
+}
+
+// Filter quota berdasarkan start_date & end_date
+// Jika ada beberapa row user+jenis yang sama, ambil yang sesuai tanggal hari ini
+function filterActiveQuota(quotaList) {
+  const today = new Date().toISOString().split('T')[0];
+  const map = {};
+
+  quotaList.forEach(q => {
+    const startDate = q.start_date ? String(q.start_date).split('T')[0] : '';
+    const endDate   = q.end_date   ? String(q.end_date).split('T')[0]   : '';
+    const key = String(q.user_id) + '|' + String(q.jenis_cuti);
+
+    // Cek apakah baris ini sesuai dengan tanggal hari ini
+    const hasRange = startDate || endDate;
+    const inRange = !hasRange ||
+                    (startDate && endDate && today >= startDate && today <= endDate) ||
+                    (startDate && !endDate && today >= startDate) ||
+                    (!startDate && endDate && today <= endDate);
+
+    if (!inRange) return; // skip baris yang tidak sesuai tanggal
+
+    // Jika ada beberapa yang lolos, prioritaskan yang punya start_date & end_date (lebih spesifik)
+    if (!map[key]) {
+      map[key] = q;
+    } else {
+      const existing = map[key];
+      const existingHasRange = existing.start_date || existing.end_date;
+      if (hasRange && !existingHasRange) {
+        map[key] = q; // ganti dengan yang lebih spesifik
+      }
+    }
+  });
+
+  return Object.values(map);
+}
+
+function renderQuotaCards(quota, containerId) {
+  const el = document.getElementById(containerId);
+  if (!quota.length) {
+    el.innerHTML = '<div class="empty-state"><p>Tidak ada data kuota cuti yang aktif saat ini.</p></div>';
+    return;
+  }
+
+  el.innerHTML = quota.map(q => {
+    const sisa     = Number(q.sisa);
+    const total    = Number(q.quota);
+    const terpakai = Number(q.terpakai);
+    const pct      = total > 0 ? Math.round((terpakai / total) * 100) : 0;
+    const barClass = pct >= 80 ? 'low' : pct >= 50 ? 'mid' : 'ok';
+    const startStr = q.start_date ? ' · Berlaku: ' + formatDate(q.start_date) + ' — ' + formatDate(q.end_date) : '';
+    return `
+      <div class="quota-card">
+        <div class="jenis">${q.jenis_cuti}</div>
+        <div class="nums"><span>Terpakai: ${terpakai} hari</span><span>Sisa: ${sisa} hari</span></div>
+        <div class="progress"><div class="progress-bar ${barClass}" style="width:${pct}%"></div></div>
+        <div class="text-sm" style="margin-top:6px;">Kuota: ${total} hari (${pct}% terpakai)${startStr}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// =====================================================================
+// PENGAJUAN CUTI (karyawan)
+// =====================================================================
+async function loadAjukan() {
+  const [tRes, qRes] = await Promise.all([
+    api({ action: 'getTransaksi', user_id: currentUser.id }),
+    api({ action: 'getQuota', user_id: currentUser.id })
+  ]);
+  myTransaksi = tRes.success ? tRes.transaksi : [];
+  myQuota = filterActiveQuota(qRes.success ? qRes.quota : []);
+
+  const sorted = [...myTransaksi].sort((a, b) => new Date(b.tgl_pengajuan) - new Date(a.tgl_pengajuan));
+  const tbody = document.getElementById('ajukan-table');
+
+  if (!sorted.length) {
+    tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><p>Belum ada pengajuan cuti.</p></div></td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = sorted.map(t => `
+    <tr>
+      <td><strong>${t.jenis_cuti}</strong></td>
+      <td>${formatDate(t.tgl_mulai)}</td>
+      <td>${formatDate(t.tgl_selesai)}</td>
+      <td style="text-align:center;">${t.jumlah_hari}</td>
+      <td style="max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${t.alasan}">${t.alasan || '-'}</td>
+      <td>${statusBadge(t.status)}</td>
+      <td>${formatDate(t.tgl_pengajuan)}</td>
+      <td>
+        ${t.status === 'pending' ? `<button class="btn btn-danger btn-sm" onclick="hapusCuti('${t.id}','${t.jenis_cuti}')">Hapus</button>` : '<span class="text-sm">-</span>'}
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openModalAjukan() {
+  if (!myQuota.length) {
+    showToast('Anda belum memiliki kuota cuti. Hubungi HR.', 'error');
+    return;
+  }
+  hideAlert('ajukan-alert');
+  const sel = document.getElementById('form-jenis');
+  sel.innerHTML = '<option value="">Pilih jenis cuti...</option>' +
+    myQuota.map(q => `<option value="${q.jenis_cuti}">${q.jenis_cuti} (Sisa: ${q.sisa} hari)</option>`).join('');
+  document.getElementById('form-tgl-mulai').value = '';
+  document.getElementById('form-tgl-selesai').value = '';
+  document.getElementById('form-hari').value = '';
+  document.getElementById('form-alasan').value = '';
+  document.getElementById('sisa-info').style.display = 'none';
+  openModal('modal-ajukan');
+}
+
+function updateSisaQuota() {
+  const jenis = document.getElementById('form-jenis').value;
+  const q = myQuota.find(q => q.jenis_cuti === jenis);
+  const info = document.getElementById('sisa-info');
+  if (q) {
+    info.style.display = 'block';
+    info.textContent = `Sisa kuota: ${q.sisa} hari dari ${q.quota} hari`;
+  } else {
+    info.style.display = 'none';
+  }
+}
+
+function hitungHari() {
+  const mulai = document.getElementById('form-tgl-mulai').value;
+  const selesai = document.getElementById('form-tgl-selesai').value;
+  if (mulai && selesai) {
+    const d1 = new Date(mulai);
+    const d2 = new Date(selesai);
+    const diff = Math.round((d2 - d1) / (1000 * 60 * 60 * 24)) + 1;
+    document.getElementById('form-hari').value = diff > 0 ? diff : 0;
+  }
+}
+
+async function submitAjukan() {
+  hideAlert('ajukan-alert');
+  const jenis = document.getElementById('form-jenis').value;
+  const mulai = document.getElementById('form-tgl-mulai').value;
+  const selesai = document.getElementById('form-tgl-selesai').value;
+  const hari = Number(document.getElementById('form-hari').value);
+  const alasan = document.getElementById('form-alasan').value;
+
+  if (!jenis || !mulai || !selesai || !hari || hari <= 0) {
+    showAlert('ajukan-alert', 'Lengkapi semua field dengan benar.');
+    return;
+  }
+
+  const btn = document.getElementById('btn-submit-ajukan');
+  btn.innerHTML = '<span class="spinner"></span> Mengirim...';
+  btn.disabled = true;
+
+  const res = await api({
+    action: 'ajukanCuti',
+    user_id: currentUser.id,
+    nama_karyawan: currentUser.name,
+    jenis_cuti: jenis,
+    tgl_mulai: mulai,
+    tgl_selesai: selesai,
+    jumlah_hari: hari,
+    alasan
+  });
+
+  btn.innerHTML = 'Ajukan Cuti';
+  btn.disabled = false;
+
+  if (res.success) {
+    showToast('Pengajuan cuti berhasil!');
+    closeModal('modal-ajukan');
+    loadAjukan();
+  } else {
+    showAlert('ajukan-alert', res.message || 'Gagal mengajukan cuti.');
+  }
+}
+
+async function hapusCuti(txId, jenisCuti) {
+  if (!confirm('Yakin ingin membatalkan pengajuan cuti ini?')) return;
+  const res = await api({ action: 'withdrawTransaksi', transaksi_id: txId, user_id: currentUser.id, jenis_cuti: jenisCuti });
+  if (res.success) {
+    showToast('Pengajuan berhasil dibatalkan.');
+    loadAjukan();
+  } else {
+    showToast(res.message || 'Gagal membatalkan.', 'error');
+  }
+}
+
+// =====================================================================
+// APPROVAL (atasan)
+// =====================================================================
+async function loadApprovalData() {
+  const filterStatus = document.getElementById('filter-status-approval').value;
+  const res = await api({ action: 'getPendingForAtasan', atasan_id: currentUser.id });
+  let transaksi = res.success ? res.transaksi : [];
+  if (filterStatus) transaksi = transaksi.filter(t => t.status === filterStatus);
+
+  const sorted = [...transaksi].sort((a, b) => new Date(b.tgl_pengajuan) - new Date(a.tgl_pengajuan));
+  const tbody = document.getElementById('approval-table');
+
+  if (!sorted.length) {
+    tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><p>Tidak ada data pengajuan cuti.</p></div></td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = sorted.map(t => `
+    <tr>
+      <td><strong>${t.nama_karyawan}</strong></td>
+      <td>${t.jenis_cuti}</td>
+      <td>${formatDate(t.tgl_mulai)}</td>
+      <td>${formatDate(t.tgl_selesai)}</td>
+      <td style="text-align:center;">${t.jumlah_hari}</td>
+      <td style="max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${t.alasan}">${t.alasan || '-'}</td>
+      <td>${statusBadge(t.status)}</td>
+      <td>${t.tgl_approval ? formatDate(t.tgl_approval) : '-'}</td>
+      <td>
+        ${t.status === 'pending' ? `
+          <div class="action-row">
+            <button class="btn btn-success btn-sm" onclick="doApprove('${t.id}','approved')">✓ Setuju</button>
+            <button class="btn btn-danger btn-sm" onclick="doApprove('${t.id}','rejected')">✗ Tolak</button>
+          </div>
+        ` : '<span class="text-sm">-</span>'}
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function doApprove(txId, status) {
+  const label = status === 'approved' ? 'menyetujui' : 'menolak';
+  if (!confirm(`Yakin ingin ${label} pengajuan ini?`)) return;
+  const res = await api({ action: 'approveCuti', transaksi_id: txId, status, approver_id: currentUser.id });
+  if (res.success) {
+    showToast(status === 'approved' ? 'Pengajuan disetujui!' : 'Pengajuan ditolak.');
+    loadApprovalData();
+  } else {
+    showToast(res.message || 'Gagal memproses.', 'error');
+  }
+}
+
+// =====================================================================
+// ALL TRANSAKSI (HR)
+// =====================================================================
+async function loadAllTransaksi() {
+  const res = await api({ action: 'getAllTransaksi' });
+  let transaksi = res.success ? res.transaksi : [];
+
+  const filterStatus = document.getElementById('filter-status-hr').value;
+  const search = document.getElementById('filter-search-hr').value.toLowerCase();
+  if (filterStatus) transaksi = transaksi.filter(t => t.status === filterStatus);
+  if (search) transaksi = transaksi.filter(t => t.nama_karyawan.toLowerCase().includes(search));
+
+  const sorted = [...transaksi].sort((a, b) => new Date(b.tgl_pengajuan) - new Date(a.tgl_pengajuan));
+  const tbody = document.getElementById('all-transaksi-table');
+
+  if (!sorted.length) {
+    tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><p>Tidak ada data transaksi.</p></div></td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = sorted.map(t => `
+    <tr>
+      <td><strong>${t.nama_karyawan}</strong></td>
+      <td>${t.jenis_cuti}</td>
+      <td>${formatDate(t.tgl_mulai)}</td>
+      <td>${formatDate(t.tgl_selesai)}</td>
+      <td style="text-align:center;">${t.jumlah_hari}</td>
+      <td style="max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${t.alasan}">${t.alasan || '-'}</td>
+      <td>${statusBadge(t.status)}</td>
+      <td>${formatDate(t.tgl_pengajuan)}</td>
+      <td>${t.tgl_approval ? formatDate(t.tgl_approval) : '-'}</td>
+    </tr>
+  `).join('');
+}
+
+// =====================================================================
+// MANAGE QUOTA (HR)
+// =====================================================================
+async function loadManageQuota() {
+  const [qRes] = await Promise.all([api({ action: 'getAllQuota' })]);
+  allQuota = qRes.success ? qRes.quota : [];
+
+  // Populate user filter — simpan value dulu sebelum rebuild agar tidak reset
+  const karyawan = allUsers.filter(u => u.role === 'karyawan');
+  const filterEl = document.getElementById('filter-user-quota');
+  const savedFilter = filterEl.value; // simpan seleksi sebelumnya
+  filterEl.innerHTML = '<option value="">Semua Karyawan</option>' +
+    karyawan.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
+  filterEl.value = savedFilter; // restore seleksi
+
+  const filterUser = filterEl.value;
+  let quota = allQuota;
+  if (filterUser) quota = quota.filter(q => String(q.user_id) === String(filterUser));
+
+  const tbody = document.getElementById('manage-quota-table');
+  if (!quota.length) {
+    tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><p>Tidak ada data kuota.</p></div></td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = quota.map(q => `
+    <tr>
+      <td><strong>${getUserName(q.user_id)}</strong></td>
+      <td>${q.jenis_cuti}</td>
+      <td style="text-align:center;">${q.quota}</td>
+      <td style="text-align:center;">${q.terpakai}</td>
+      <td style="text-align:center;"><strong style="color:${Number(q.sisa)<=2?'#e02424':'var(--text)'}">${q.sisa}</strong></td>
+      <td>
+        <button class="btn btn-outline btn-sm" onclick="openEditQuota('${q.user_id}','${q.jenis_cuti}',${q.quota})">Edit</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openModalTambahQuota() {
+  hideAlert('quota-alert');
+  const karyawan = allUsers.filter(u => u.role === 'karyawan');
+  document.getElementById('form-quota-user').innerHTML = karyawan.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
+  document.getElementById('form-quota-jenis').value = '';
+  document.getElementById('form-quota-jumlah').value = '';
+  openModal('modal-tambah-quota');
+}
+
+async function submitTambahQuota() {
+  hideAlert('quota-alert');
+  const user_id = document.getElementById('form-quota-user').value;
+  const jenis_cuti = document.getElementById('form-quota-jenis').value.trim();
+  const quota = document.getElementById('form-quota-jumlah').value;
+
+  if (!user_id || !jenis_cuti || quota === '') {
+    showAlert('quota-alert', 'Semua field wajib diisi.');
+    return;
+  }
+
+  const res = await api({ action: 'addQuotaJenis', user_id, jenis_cuti, quota });
+  if (res.success) {
+    showToast('Kuota berhasil ditambahkan!');
+    closeModal('modal-tambah-quota');
+    loadManageQuota();
+  } else {
+    showAlert('quota-alert', res.message || 'Gagal menambah kuota.');
+  }
+}
+
+function openEditQuota(userId, jenis, quota) {
+  document.getElementById('edit-quota-userid').value = userId;
+  document.getElementById('edit-quota-jenis').value = jenis;
+  document.getElementById('edit-quota-nama').value = getUserName(userId);
+  document.getElementById('edit-quota-jenis-show').value = jenis;
+  document.getElementById('edit-quota-value').value = quota;
+  openModal('modal-edit-quota');
+}
+
+async function submitEditQuota() {
+  const user_id = document.getElementById('edit-quota-userid').value;
+  const jenis_cuti = document.getElementById('edit-quota-jenis').value;
+  const newQuota = Number(document.getElementById('edit-quota-value').value);
+
+  // Hitung ulang sisa berdasarkan terpakai yang ada
+  const existing = allQuota.find(q => q.user_id === user_id && q.jenis_cuti === jenis_cuti);
+  const terpakai = existing ? Number(existing.terpakai) : 0;
+  const newSisa = newQuota - terpakai;
+
+  const res = await api({ action: 'updateQuota', user_id, jenis_cuti, quota: newQuota, sisa: newSisa });
+  if (res.success) {
+    showToast('Kuota berhasil diperbarui!');
+    closeModal('modal-edit-quota');
+    loadManageQuota();
+  } else {
+    showToast(res.message || 'Gagal memperbarui.', 'error');
+  }
+}
+
+// =====================================================================
+// HELPER RENDER TABLES
+// =====================================================================
+function renderTransaksiTable(tbodyId, transaksi, showActions) {
+  const tbody = document.getElementById(tbodyId);
+  if (!transaksi.length) {
+    tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><p>Belum ada riwayat cuti.</p></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = transaksi.map(t => `
+    <tr>
+      <td>${t.jenis_cuti}</td>
+      <td>${formatDate(t.tgl_mulai)}</td>
+      <td>${formatDate(t.tgl_selesai)}</td>
+      <td style="text-align:center;">${t.jumlah_hari}</td>
+      <td>${statusBadge(t.status)}</td>
+    </tr>
+  `).join('');
+}
+
+function renderTransaksiTableAtasan(tbodyId, transaksi) {
+  const tbody = document.getElementById(tbodyId);
+  if (!transaksi.length) {
+    tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><p>Belum ada transaksi.</p></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = transaksi.map(t => `
+    <tr>
+      <td><strong>${t.nama_karyawan}</strong></td>
+      <td>${t.jenis_cuti}</td>
+      <td>${formatDate(t.tgl_mulai)}</td>
+      <td>${formatDate(t.tgl_selesai)}</td>
+      <td>${statusBadge(t.status)}</td>
+    </tr>
+  `).join('');
+}
+
+// =====================================================================
+// PHL (karyawan)
+// =====================================================================
+let myPHL = [];
+
+async function loadPHL() {
+  const tbody1 = document.getElementById('phl-available-table');
+  const tbody2 = document.getElementById('phl-used-table');
+  tbody1.innerHTML = '<tr><td colspan="4" class="loading">Memuat data PHL...</td></tr>';
+  tbody2.innerHTML = '<tr><td colspan="6" class="loading">Memuat data PHL...</td></tr>';
+
+  const res = await api({ action: 'getPHL', user_id: currentUser.id });
+  if (!res.success) {
+    tbody1.innerHTML = `<tr><td colspan="4"><div class="empty-state"><p>${res.message}</p></div></td></tr>`;
+    tbody2.innerHTML = `<tr><td colspan="6"><div class="empty-state"><p>-</p></div></td></tr>`;
+    return;
+  }
+
+  myPHL = res.phl || [];
+  const today = new Date().toISOString().split('T')[0];
+
+  // Normalisasi tanggal ISO ke YYYY-MM-DD untuk perbandingan
+  function toDate(val) {
+    if (!val) return '';
+    return val.split('T')[0];
+  }
+
+  // PHL tersedia: belum digunakan (digunakan_tgl kosong) & dalam masa berlaku
+  const available = myPHL.filter(p => {
+    return (!p.digunakan_tgl || p.digunakan_tgl === '') &&
+           p.status === 'aktif' &&
+           today >= toDate(p.tgl_start) && today <= toDate(p.tgl_end);
+  });
+
+  // PHL sudah diajukan/digunakan: ada digunakan_tgl nya
+  const used = myPHL.filter(p => p.digunakan_tgl && p.digunakan_tgl !== '');
+
+  // Render available
+  if (!available.length) {
+    tbody1.innerHTML = '<tr><td colspan="4"><div class="empty-state"><p>Tidak ada PHL tersedia saat ini.</p></div></td></tr>';
+  } else {
+    tbody1.innerHTML = available.map(p => {
+      const tglStart = toDate(p.tgl_start);
+      const tglEnd   = toDate(p.tgl_end);
+      const tglMasuk = toDate(p.tgl_masuk);
+      return `
+      <tr>
+        <td><strong>${formatDate(p.tgl_masuk)}</strong></td>
+        <td>${formatDate(p.tgl_start)} — ${formatDate(p.tgl_end)}</td>
+        <td style="max-width:200px;">${p.keterangan || '-'}</td>
+        <td>
+          <button class="btn btn-primary btn-sm" onclick="openModalPHL('${p.id}','${tglMasuk}','${tglStart}','${tglEnd}','${p.keterangan||''}')">Gunakan</button>
+        </td>
+      </tr>
+    `}).join('');
+  }
+
+  // Render used — cari status dari transaksi
+  if (!used.length) {
+    tbody2.innerHTML = '<tr><td colspan="6"><div class="empty-state"><p>Belum ada riwayat penggunaan PHL.</p></div></td></tr>';
+  } else {
+    // Ambil transaksi PHL user ini untuk cek status approval
+    const txRes = await api({ action: 'getTransaksi', user_id: currentUser.id });
+    const txList = txRes.success ? txRes.transaksi : [];
+
+    tbody2.innerHTML = used.map(p => {
+      // Cari transaksi berdasarkan ref_phl_id — gunakan String() agar tipe data tidak jadi masalah
+      const tx = txList.find(t => String(t.ref_phl_id) === String(p.id));
+      const status = tx ? String(tx.status) : 'pending';
+      const tglApproval = tx && tx.tgl_approval ? formatDate(tx.tgl_approval) : '-';
+      const alasan = tx ? (tx.alasan || '-') : '-';
+      const txId = tx ? String(tx.id) : '';
+
+      // Tombol hapus hanya untuk pending dan rejected
+      const showHapus = txId && (status === 'pending' || status === 'rejected');
+
+      return `
+        <tr>
+          <td><strong>${formatDate(p.tgl_masuk)}</strong></td>
+          <td>${formatDate(p.digunakan_tgl)}</td>
+          <td style="max-width:160px;">${alasan}</td>
+          <td>${statusBadge(status)}</td>
+          <td>${tglApproval}</td>
+          <td>
+            ${showHapus ? `<button class="btn btn-danger btn-sm" onclick="hapusPHL('${txId}','${p.id}')">Hapus</button>` : '<span class="text-sm">-</span>'}
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+}
+
+function openModalPHL(phlId, tglMasuk, tglStart, tglEnd, keterangan) {
+  hideAlert('phl-modal-alert');
+  document.getElementById('form-phl-id').value = phlId;
+  document.getElementById('form-phl-tgl-masuk').value = tglMasuk;
+  document.getElementById('form-phl-info').value = `PHL tanggal masuk: ${formatDate(tglMasuk)}${keterangan ? ' — ' + keterangan : ''}`;
+  document.getElementById('form-phl-digunakan-tgl').value = '';
+  document.getElementById('form-phl-digunakan-tgl').min = tglStart;
+  document.getElementById('form-phl-digunakan-tgl').max = tglEnd;
+  document.getElementById('form-phl-berlaku-info').textContent = `Berlaku: ${formatDate(tglStart)} s/d ${formatDate(tglEnd)}`;
+  document.getElementById('form-phl-alasan').value = '';
+  openModal('modal-phl');
+}
+
+async function submitPHL() {
+  hideAlert('phl-modal-alert');
+  const phlId      = document.getElementById('form-phl-id').value;
+  const tglMasuk   = document.getElementById('form-phl-tgl-masuk').value;
+  const digunakanTgl = document.getElementById('form-phl-digunakan-tgl').value;
+  const alasan     = document.getElementById('form-phl-alasan').value.trim();
+  const minDate    = document.getElementById('form-phl-digunakan-tgl').min;
+  const maxDate    = document.getElementById('form-phl-digunakan-tgl').max;
+
+  if (!digunakanTgl) {
+    showAlert('phl-modal-alert', 'Pilih tanggal tidak masuk terlebih dahulu.');
+    return;
+  }
+  if (digunakanTgl < minDate || digunakanTgl > maxDate) {
+    showAlert('phl-modal-alert', `Tanggal harus dalam masa berlaku PHL (${formatDate(minDate)} — ${formatDate(maxDate)}).`);
+    return;
+  }
+  if (!alasan) {
+    showAlert('phl-modal-alert', 'Alasan wajib diisi.');
+    return;
+  }
+
+  const btn = document.getElementById('btn-submit-phl');
+  btn.innerHTML = '<span class="spinner"></span> Mengajukan...';
+  btn.disabled = true;
+
+  const res = await api({
+    action: 'ajukanPHL',
+    user_id: currentUser.id,
+    nama_karyawan: currentUser.name,
+    phl_id: phlId,
+    tgl_masuk: tglMasuk,
+    digunakan_tgl: digunakanTgl,
+    alasan
+  });
+
+  btn.innerHTML = 'Ajukan';
+  btn.disabled = false;
+
+  if (res.success) {
+    showToast('PHL berhasil diajukan!');
+    closeModal('modal-phl');
+    loadPHL();
+  } else {
+    showAlert('phl-modal-alert', res.message || 'Gagal mengajukan PHL.');
+  }
+}
+
+async function hapusPHL(txId, phlId) {
+  if (!confirm('Yakin ingin membatalkan pengajuan PHL ini? PHL akan kembali tersedia untuk diajukan ulang.')) return;
+  // Kirim txId agar backend bisa cek status — hapus transaksi jika pending, biarkan jika rejected
+  const res = await api({ action: 'batalPHL', transaksi_id: txId, phl_id: phlId, user_id: currentUser.id });
+  if (res.success) {
+    showToast('Pengajuan PHL dibatalkan. PHL kembali tersedia.');
+    loadPHL();
+  } else {
+    showToast(res.message || 'Gagal membatalkan.', 'error');
+  }
+}
+
+// =====================================================================
+// ICONS
+// =====================================================================
+function homeIcon() { return `<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>`; }
+function chartIcon() { return `<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>`; }
+function docIcon() { return `<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`; }
+function checkIcon() { return `<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`; }
+function listIcon() { return `<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>`; }
+function settingIcon() { return `<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`; }
+function phlIcon() { return `<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>`; }
+</script>
+</body>
+</html>
